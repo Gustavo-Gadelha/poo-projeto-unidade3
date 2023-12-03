@@ -2,34 +2,19 @@ package com.fesfafic.Model;
 
 import com.fesfafic.Contract.IAdministrador;
 
-import java.util.UUID;
-
-public class Administrador implements IAdministrador {
-    private UUID id;
+public class Administrador extends Utilizador implements IAdministrador {
     private String codigoDeAcesso;
-    private String nome;
     private int nivel;
 
-    public Administrador(String codigoDeAcesso, String nome, int nivel) {
-        this.id = UUID.randomUUID();
+    public Administrador(String email, String senha, String codigoDeAcesso, int nivel) {
+        super(email, senha);
         this.codigoDeAcesso = codigoDeAcesso;
-        this.nome = nome;
         this.nivel = nivel;
-    }
-
-    @Override
-    public UUID getId() {
-        return id;
     }
 
     @Override
     public String getCodigoDeAcesso() {
         return codigoDeAcesso;
-    }
-
-    @Override
-    public String getNome() {
-        return nome;
     }
 
     @Override

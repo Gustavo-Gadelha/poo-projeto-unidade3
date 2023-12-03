@@ -2,35 +2,37 @@ package com.fesfafic.Controller;
 
 import com.fesfafic.Contract.IController;
 import com.fesfafic.DAO.PedidoDAO;
+import com.fesfafic.DAO.ProdutoDAO;
 import com.fesfafic.Model.Pedido;
+import com.fesfafic.Model.Produto;
 
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class ProdutoController implements IController<Pedido> {
-    private PedidoDAO dao;
+public class ProdutoController implements IController<Produto> {
+    private ProdutoDAO dao;
 
     public ProdutoController() {
-        this.dao = new PedidoDAO();
+        this.dao = new ProdutoDAO();
     }
 
     @Override
-    public Pedido get(UUID id) {
+    public Produto get(UUID id) {
         return dao.get(id);
     }
 
     @Override
-    public ArrayList<Pedido> listarTodos() {
+    public ArrayList<Produto> listarTodos() {
         return dao.listarTodos();
     }
 
     @Override
-    public boolean adicionar(Pedido pedido) {
+    public boolean adicionar(Produto pedido) {
         return dao.adicionar(pedido);
     }
 
     @Override
-    public boolean remover(Pedido pedido) {
+    public boolean remover(Produto pedido) {
         return dao.remover(pedido);
     }
 }

@@ -5,8 +5,11 @@ import com.fesfafic.Contract.IProduto;
 import com.fesfafic.Exception.ProdutoException;
 
 public class Cliente extends Utilizador implements ICliente {
-    public Cliente(String email, String senha, double saldo) {
-        super(email, senha, saldo);
+    private double saldo;
+
+    public Cliente(String email, String senha) {
+        super(email, senha);
+        this.saldo = 0;
     }
 
     @Override
@@ -32,5 +35,35 @@ public class Cliente extends Utilizador implements ICliente {
         } else {
             return false;
         }
+    }
+
+    @Override
+    public boolean sacar(double valor) {
+        if (valor <= this.saldo) {
+            this.saldo -= valor;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public void depositar(double valor) {
+        this.saldo += valor;
+    }
+
+    @Override
+    public boolean transferirPara(ICliente utilizador, double valor) {
+        if (this.sacar(valor)) {
+            utilizador.depositar(valor);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public double getSaldo() {
+        return saldo;
     }
 }

@@ -1,15 +1,15 @@
 package com.fesfafic.Model;
 
 import com.fesfafic.Contract.IAvaliacao;
+import com.fesfafic.Contract.ICliente;
 import com.fesfafic.Contract.IProduto;
-import com.fesfafic.Contract.IVendedor;
 
 import java.util.ArrayList;
 import java.util.UUID;
 
 public class Produto implements IProduto {
     private UUID id;
-    private IVendedor vendedor;
+    private ICliente vendedor;
     private String nome;
     private double valor;
     private int quantidade;
@@ -17,7 +17,7 @@ public class Produto implements IProduto {
 
     private ArrayList<IAvaliacao> avaliacoes;
 
-    public Produto(IVendedor vendedor, String nome, double valor, int quantidade, String descricao) {
+    public Produto(ICliente vendedor, String nome, double valor, int quantidade, String descricao) {
         this.id = UUID.randomUUID();
         this.vendedor = vendedor;
         this.nome = nome;
@@ -27,7 +27,7 @@ public class Produto implements IProduto {
         this.avaliacoes = new ArrayList<>();
     }
 
-    public Produto(IVendedor vendedor, String nome, double valor, int quantidade) {
+    public Produto(ICliente vendedor, String nome, double valor, int quantidade) {
         this.id = UUID.randomUUID();
         this.vendedor = vendedor;
         this.nome = nome;
@@ -48,7 +48,7 @@ public class Produto implements IProduto {
     }
 
     @Override
-    public IVendedor getVendedor() {
+    public ICliente getVendedor() {
         return vendedor;
     }
 

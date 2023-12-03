@@ -2,7 +2,7 @@ package com.fesfafic.Contract;
 
 public interface IAvaliacao {
 
-    IUtilizador getAutor();
+    IUtilizador getCliente();
 
     String getConteudo();
 

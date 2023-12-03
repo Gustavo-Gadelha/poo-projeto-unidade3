@@ -7,7 +7,7 @@ public interface IProduto {
 
     UUID getId();
 
-    IVendedor getVendedor();
+    ICliente getVendedor();
 
     String getNome();
 
