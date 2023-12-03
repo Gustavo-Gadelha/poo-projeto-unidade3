@@ -3,14 +3,17 @@ package com.fesfafic.Model;
 import com.fesfafic.Contract.IUtilizador;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 public abstract class Utilizador implements IUtilizador {
+    private UUID id;
     private String email;
     private String senha;
     private double saldo;
     private ArrayList<String> historico;
 
     public Utilizador(String email, String senha, double saldo) {
+        this.id = UUID.randomUUID();
         this.email = email;
         this.senha = senha;
         this.saldo = saldo;
@@ -38,7 +41,7 @@ public abstract class Utilizador implements IUtilizador {
     }
 
     @Override
-    public boolean transferePara(IUtilizador utilizador, double valor) {
+    public boolean transferirPara(IUtilizador utilizador, double valor) {
         if (this.sacar(valor)) {
             utilizador.depositar(valor);
             return true;
@@ -53,6 +56,11 @@ public abstract class Utilizador implements IUtilizador {
     }
 
     @Override
+    public UUID getId() {
+        return id;
+    }
+
+    @Override
     public String getEmail() {
         return this.email;
     }
@@ -60,6 +68,11 @@ public abstract class Utilizador implements IUtilizador {
     @Override
     public String getSenha() {
         return this.senha;
+    }
+
+    @Override
+    public double getSaldo() {
+        return saldo;
     }
 
     @Override

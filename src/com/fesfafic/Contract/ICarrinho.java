@@ -1,6 +1,7 @@
 package com.fesfafic.Contract;
 
-import com.fesfafic.Model.Produto;
+import java.util.ArrayList;
+import java.util.UUID;
 
 public interface ICarrinho {
 
@@ -8,5 +9,9 @@ public interface ICarrinho {
 
     boolean removerProduto(IProduto produto);
 
+    UUID getId();
+
     ICliente getCliente();
+
+    ArrayList<IProduto> getProdutos();
 }

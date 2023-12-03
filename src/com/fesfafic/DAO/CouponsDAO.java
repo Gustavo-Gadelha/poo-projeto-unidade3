@@ -1,4 +1,40 @@
 package com.fesfafic.DAO;
 
-public class CouponsDAO {
+import com.fesfafic.Contract.IDao;
+import com.fesfafic.Model.Coupon;
+
+import java.util.ArrayList;
+import java.util.UUID;
+
+public class CouponsDAO implements IDao<Coupon> {
+    private ArrayList<Coupon> coupons;
+
+    public CouponsDAO() {
+        this.coupons = new ArrayList<>();
+    }
+
+    @Override
+    public Coupon get(UUID id) {
+        for (Coupon coupon : coupons) {
+            if (coupon.getId() == id) {
+                return coupon;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public ArrayList<Coupon> listarTodos() {
+        return new ArrayList<>(coupons);
+    }
+
+    @Override
+    public boolean adicionar(Coupon coupon) {
+        return coupons.add(coupon);
+    }
+
+    @Override
+    public boolean remover(Coupon coupon) {
+        return coupons.remove(coupon);
+    }
 }

@@ -7,10 +7,10 @@ import com.fesfafic.Model.Pedido;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class PedidoController implements IController<Pedido> {
+public class ProdutoController implements IController<Pedido> {
     private PedidoDAO dao;
 
-    public PedidoController() {
+    public ProdutoController() {
         this.dao = new PedidoDAO();
     }
 

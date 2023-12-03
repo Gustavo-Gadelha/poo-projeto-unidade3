@@ -1,7 +1,8 @@
 package com.fesfafic.Contract;
 
-import com.fesfafic.Model.Avaliacao;
+public interface ICliente extends IUtilizador {
 
-public interface ICliente {
-    Avaliacao deixarAvaliacao(String avaliacao, int nota);
+    boolean comprarProduto(IProduto produto);
+
+    boolean comprarProduto(IProduto produto, int quantidade);
 }
