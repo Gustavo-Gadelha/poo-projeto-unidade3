@@ -23,6 +23,14 @@ public class ProdutoDAO implements IDao<Produto> {
         return null;
     }
 
+    public Produto get(int indice) {
+        if (indice >= 0 && indice < produtos.size()) {
+            return produtos.get(indice);
+        } else {
+            return null;
+        }
+    }
+
     @Override
     public ArrayList<Produto> listarTodos() {
         return new ArrayList<>(produtos);

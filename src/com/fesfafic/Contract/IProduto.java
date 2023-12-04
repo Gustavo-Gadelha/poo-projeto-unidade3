@@ -3,7 +3,6 @@ package com.fesfafic.Contract;
 import java.util.UUID;
 
 public interface IProduto {
-    boolean adicionarAvaliacao(IAvaliacao avaliacao);
 
     UUID getId();
 

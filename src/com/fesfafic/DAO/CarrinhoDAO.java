@@ -1,5 +1,6 @@
 package com.fesfafic.DAO;
 
+import com.fesfafic.Contract.ICliente;
 import com.fesfafic.Contract.IDao;
 import com.fesfafic.Model.Carrinho;
 
@@ -17,6 +18,15 @@ public class CarrinhoDAO implements IDao<Carrinho> {
     public Carrinho get(UUID id) {
         for (Carrinho carrinho : carrinhos) {
             if (carrinho.getId() == id) {
+                return carrinho;
+            }
+        }
+        return null;
+    }
+
+    public Carrinho get(ICliente cliente) {
+        for (Carrinho carrinho : carrinhos) {
+            if (carrinho.getCliente() == cliente) {
                 return carrinho;
             }
         }

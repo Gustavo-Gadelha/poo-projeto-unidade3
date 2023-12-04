@@ -12,14 +12,16 @@ public class Avaliacao implements IAvaliacao {
     private ICliente cliente;
     private String conteudo;
     private IProduto produto;
-    private int nota;
-
-    public Avaliacao(ICliente cliente, IProduto produto, String conteudo, int nota) {
+    public Avaliacao(ICliente cliente, IProduto produto, String conteudo) {
         this.id = UUID.randomUUID();
         this.cliente = cliente;
         this.produto = produto;
         this.conteudo = conteudo;
-        this.nota = nota;
+    }
+
+    @Override
+    public UUID getId() {
+        return id;
     }
 
     @Override
@@ -35,10 +37,5 @@ public class Avaliacao implements IAvaliacao {
     @Override
     public IProduto getProduto() {
         return produto;
-    }
-
-    @Override
-    public int getNota() {
-        return nota;
     }
 }

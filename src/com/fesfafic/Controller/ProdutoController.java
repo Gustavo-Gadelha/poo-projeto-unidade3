@@ -21,6 +21,10 @@ public class ProdutoController implements IController<Produto> {
         return dao.get(id);
     }
 
+    public Produto get(int indice) {
+        return dao.get(indice);
+    }
+
     @Override
     public ArrayList<Produto> listarTodos() {
         return dao.listarTodos();

@@ -1,5 +1,6 @@
 package com.fesfafic.Controller;
 
+import com.fesfafic.Contract.ICliente;
 import com.fesfafic.Contract.IController;
 import com.fesfafic.DAO.CarrinhoDAO;
 import com.fesfafic.Model.Carrinho;
@@ -17,6 +18,10 @@ public class CarrinhoController implements IController<Carrinho> {
     @Override
     public Carrinho get(UUID id) {
         return dao.get(id);
+    }
+
+    public Carrinho get(ICliente cliente) {
+        return dao.get(cliente);
     }
 
     @Override
