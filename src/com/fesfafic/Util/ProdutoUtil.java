@@ -2,20 +2,24 @@ package com.fesfafic.Util;
 
 import com.fesfafic.Contract.ICliente;
 import com.fesfafic.Contract.IProduto;
-import com.fesfafic.Exception.AvaliacaoException;
+import com.fesfafic.Exception.AtributoVazioException;
 import com.fesfafic.Model.Avaliacao;
 import com.fesfafic.Model.Produto;
 
 import java.util.ArrayList;
-import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class ProdutoUtil {
-    private static final Scanner scanner = new Scanner(System.in);
+    private static final Scanner lineScanner = new Scanner(System.in);
 
-    public static int pedirIndice(int limite) throws IndexOutOfBoundsException, InputMismatchException {
+    public static int pedirIndice(int limite) throws IndexOutOfBoundsException, NumberFormatException {
+        int indice;
         System.out.print("Digite o índice do produto: ");
-        int indice = scanner.nextInt();
+        try {
+            indice = Integer.parseInt(lineScanner.nextLine());
+        } catch (NumberFormatException e) {
+            throw new NumberFormatException("Valor do índice dever ser um número inteiro");
+        }
 
         if (indice < 0) {
             throw new IndexOutOfBoundsException("Índice deve ser maior ou igual a 0");
@@ -26,13 +30,13 @@ public class ProdutoUtil {
         return indice;
     }
 
-    public static Avaliacao pedirAvaliacao(ICliente cliente, IProduto produto) throws AvaliacaoException {
+    public static Avaliacao pedirAvaliacao(ICliente cliente, IProduto produto) throws AtributoVazioException {
         System.out.print("Digite o conteúdo da sua avaliação: ");
-        String conteudo = scanner.nextLine();
+        String conteudo = lineScanner.nextLine().strip();
 
-        // remove qualquer espaço em branco e checa se o conteúdo da avaliação é vazio
-        if (conteudo.strip().isBlank()) {
-            throw new AvaliacaoException("O conteúdo da avaliação não pode estar em branco");
+        // checa se o conteúdo da avaliação é vazio
+        if (conteudo.isBlank()) {
+            throw new AtributoVazioException("O conteúdo da avaliação não pode estar em branco");
         }
 
         return new Avaliacao(cliente, produto, conteudo);
@@ -49,9 +53,9 @@ public class ProdutoUtil {
             System.out.println("Nenhum produto registrado");
         } else {
             int contador = 0;
-            System.out.printf("%3s - %20s - %8s - %3s\n","IND", "Produto", "Valor", "QTD");
+            System.out.printf("%3s | %-20s | %10s | %3s\n","IND", "Produto", "Valor", "QTD");
             for (Produto produto : produtos) {
-                System.out.printf("%03d | %20s | R$%6f | %03d\n",
+                System.out.printf("%03d | %-20s | R$%8.2f | %03d\n",
                         contador,
                         produto.getNome(),
                         produto.getValor(),

@@ -1,5 +1,6 @@
 package com.fesfafic.DAO;
 
+import com.fesfafic.Contract.ICliente;
 import com.fesfafic.Contract.IDao;
 import com.fesfafic.Model.Produto;
 
@@ -34,6 +35,17 @@ public class ProdutoDAO implements IDao<Produto> {
     @Override
     public ArrayList<Produto> listarTodos() {
         return new ArrayList<>(produtos);
+    }
+
+    public ArrayList<Produto> listarPorCliente(ICliente cliente) {
+        ArrayList<Produto> lista= new ArrayList<>();
+        for (Produto produto : produtos) {
+            if (produto.getVendedor() == cliente) {
+                lista.add(produto);
+            }
+        }
+
+        return lista;
     }
 
     @Override

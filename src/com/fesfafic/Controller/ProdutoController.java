@@ -1,9 +1,8 @@
 package com.fesfafic.Controller;
 
+import com.fesfafic.Contract.ICliente;
 import com.fesfafic.Contract.IController;
-import com.fesfafic.DAO.PedidoDAO;
 import com.fesfafic.DAO.ProdutoDAO;
-import com.fesfafic.Model.Pedido;
 import com.fesfafic.Model.Produto;
 
 import java.util.ArrayList;
@@ -28,6 +27,10 @@ public class ProdutoController implements IController<Produto> {
     @Override
     public ArrayList<Produto> listarTodos() {
         return dao.listarTodos();
+    }
+
+    public ArrayList<Produto> listarPorCliente(ICliente cliente) {
+        return dao.listarPorCliente(cliente);
     }
 
     @Override

@@ -1,7 +1,5 @@
 package com.fesfafic.Contract;
 
-import com.fesfafic.Model.Cliente;
-
 public interface IMenu {
 
     void menuInicial();

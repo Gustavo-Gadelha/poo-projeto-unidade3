@@ -11,16 +11,6 @@ public class Produto implements IProduto {
     private String nome;
     private double valor;
     private int quantidade;
-    private String descricao;
-
-    public Produto(ICliente vendedor, String nome, double valor, int quantidade, String descricao) {
-        this.id = UUID.randomUUID();
-        this.vendedor = vendedor;
-        this.nome = nome;
-        this.valor = valor;
-        this.quantidade = quantidade;
-        this.descricao = descricao;
-    }
 
     public Produto(ICliente vendedor, String nome, double valor, int quantidade) {
         this.id = UUID.randomUUID();
@@ -28,7 +18,6 @@ public class Produto implements IProduto {
         this.nome = nome;
         this.valor = valor;
         this.quantidade = quantidade;
-        this.descricao = "Produto sem descrição";
     }
 
     @Override
@@ -44,6 +33,11 @@ public class Produto implements IProduto {
     @Override
     public String getNome() {
         return this.nome;
+    }
+
+    @Override
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     @Override
@@ -64,15 +58,5 @@ public class Produto implements IProduto {
     @Override
     public void setQuantidade(int quantidade) {
         this.quantidade = quantidade;
-    }
-
-    @Override
-    public String getDescricao() {
-        return this.descricao;
-    }
-
-    @Override
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
     }
 }

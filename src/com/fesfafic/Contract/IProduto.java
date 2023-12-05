@@ -10,6 +10,8 @@ public interface IProduto {
 
     String getNome();
 
+    void setNome(String nome);
+
     double getValor();
 
     void setValor(double valor);
@@ -17,8 +19,4 @@ public interface IProduto {
     int getQuantidade();
 
     void setQuantidade(int quantidade);
-
-    String getDescricao();
-
-    void setDescricao(String descricao);
 }

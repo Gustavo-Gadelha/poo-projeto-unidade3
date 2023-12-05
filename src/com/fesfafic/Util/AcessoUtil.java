@@ -1,53 +1,56 @@
 package com.fesfafic.Util;
 
+import com.fesfafic.Exception.AtributoVazioException;
 import com.fesfafic.Exception.CadastroException;
-import com.fesfafic.Exception.LoginException;
 import com.fesfafic.Model.Cliente;
 
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class AcessoUtil {
-    private static final Scanner scanner = new Scanner(System.in);
+    private static final Scanner lineScanner = new Scanner(System.in);
 
-    public static Cliente pedirLogin(ArrayList<Cliente> clientes) throws LoginException {
+    public static Cliente pedirLogin(ArrayList<Cliente> clientes) throws AtributoVazioException {
         System.out.println("\n========== Realizar login ==========\n");
 
         System.out.print("Digite seu email: ");
-        String email = scanner.nextLine();
+        String email = lineScanner.nextLine().strip();
         System.out.print("Digite sua senha: ");
-        String senha = scanner.nextLine();
+        String senha = lineScanner.nextLine().strip();
 
-        // Retira os espaços em branco e checa se o e-mail ou a senha estão em branco
+        // Checa se o e-mail ou a senha estão em branco
         // Caso verdadeiro, levanta um erro
-        if (email.strip().isBlank()) {
-            throw new LoginException("E-mail está em branco");
-        } else if (senha.strip().isBlank()) {
-            throw new LoginException("Senha está em branco");
+        if (email.isBlank()) {
+            throw new AtributoVazioException("E-mail está em branco");
+        } else if (senha.isBlank()) {
+            throw new AtributoVazioException("Senha está em branco");
         }
 
         for (Cliente cliente : clientes) {
             if (cliente.fazerLogin(email, senha)) {
+                System.out.println("Login realizado com sucesso!");
                 return cliente;
             }
         }
+
+        System.out.println("Email ou senha não encontrados");
         return null;
     }
 
-    public static Cliente pedirCadastro(ArrayList<Cliente> clientes) throws CadastroException {
+    public static Cliente pedirCadastro(ArrayList<Cliente> clientes) throws CadastroException, AtributoVazioException {
         System.out.println("\n========== Realizar Cadastro ==========\n");
 
         System.out.print("Digite seu e-mail: ");
-        String email = scanner.nextLine();
+        String email = lineScanner.nextLine().strip();
         System.out.print("Digite sua senha: ");
-        String senha = scanner.nextLine();
+        String senha = lineScanner.nextLine().strip();
 
-        // Retira os espaços em branco e checa se o e-mail ou a senha estão em branco
+        // Checa se o e-mail ou a senha estão em branco
         // Caso verdadeiro, levanta um erro
-        if (email.strip().isBlank()) {
-            throw new CadastroException("E-mail não pode está em branco");
-        } else if (senha.strip().isBlank()) {
-            throw new CadastroException("Senha não pode está em branco");
+        if (email.isBlank()) {
+            throw new AtributoVazioException("E-mail não pode está em branco");
+        } else if (senha.isBlank()) {
+            throw new AtributoVazioException("Senha não pode está em branco");
         }
 
         for (Cliente cliente : clientes) {
