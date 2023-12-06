@@ -13,36 +13,9 @@ public class VendedorUtil {
     public static Produto publicarProduto(ICliente cliente) throws ProdutoException, AtributoVazioException, NumberFormatException {
         System.out.println("\n========== Publicar Produto ==========\n");
 
-        // Nome do produto, não pode estar em branco
-        System.out.print("Digite o nome do produto: ");
-        String nome = lineScanner.nextLine().strip();
-        if (nome.isBlank()) {
-            throw new AtributoVazioException("Nome do produto não pode estar em branco");
-        }
-
-        // Valor do produto, deve ser um número decimal e maior que zero
-        System.out.print("Digite o valor do produto: ");
-        double valor;
-        try {
-            valor = Double.parseDouble(lineScanner.nextLine());
-            if (valor <= 0) {
-                throw new ProdutoException("Valor do produto deve ser maior que zero");
-            }
-        } catch (NumberFormatException e) {
-            throw new NumberFormatException("Valor do produto deve ser ser um número decimal");
-        }
-
-        // Quantidade do produto, deve ser um número inteiro e maior que zero
-        System.out.print("Digite a quantidade do produto: ");
-        int quantidade;
-        try {
-            quantidade = Integer.parseInt(lineScanner.nextLine());
-            if (quantidade <= 0) {
-                throw new ProdutoException("Quantidade do produto deve ser maior que zero");
-            }
-        } catch (NumberFormatException e) {
-            throw new NumberFormatException("Quantidade do produto deve ser um número inteiro");
-        }
+        String nome = ProdutoUtil.pedirNome();
+        double valor = ProdutoUtil.pedirValor();
+        int quantidade = ProdutoUtil.pedirQuantidade();
 
         return new Produto(cliente, nome, valor, quantidade);
     }
@@ -63,52 +36,25 @@ public class VendedorUtil {
         System.out.print("Digite sua escolha: ");
         escolha = lineScanner.nextLine();
 
+        // Como o método requer uma referência ao objeto, não é necessário um método "atualizar" dentro do DAO
         switch (escolha) {
             // 1. Atualizar Nome
             case "1": {
-                // Nome do produto, não pode estar em branco
-                System.out.print("Digite o nome do produto: ");
-                String nome = lineScanner.nextLine().strip();
-                if (nome.isBlank()) {
-                    throw new AtributoVazioException("Nome do produto não pode estar em branco");
-                }
-
+                String nome = ProdutoUtil.pedirNome();
                 produto.setNome(nome);
                 break;
             }
 
             // 2. Atualizar Valor
             case "2": {
-                // Valor do produto, deve ser um número decimal e maior que zero
-                System.out.print("Digite o valor do produto: ");
-                double valor;
-                try {
-                    valor = Double.parseDouble(lineScanner.nextLine());
-                    if (valor <= 0) {
-                        throw new ProdutoException("Valor do produto deve ser maior que zero");
-                    }
-                } catch (NumberFormatException e) {
-                    throw new NumberFormatException("Valor do produto deve ser ser um número decimal");
-                }
-
+                double valor = ProdutoUtil.pedirValor();
                 produto.setValor(valor);
                 break;
             }
 
             // 3. Atualizar Quantidade
             case "3": {
-                // Quantidade do produto, deve ser um número inteiro e maior que zero
-                System.out.print("Digite a quantidade do produto: ");
-                int quantidade;
-                try {
-                    quantidade = Integer.parseInt(lineScanner.nextLine());
-                    if (quantidade <= 0) {
-                        throw new ProdutoException("Quantidade do produto deve ser maior que zero");
-                    }
-                } catch (NumberFormatException e) {
-                    throw new NumberFormatException("Quantidade do produto deve ser um número inteiro");
-                }
-
+                int quantidade = ProdutoUtil.pedirQuantidade();
                 produto.setQuantidade(quantidade);
                 break;
             }

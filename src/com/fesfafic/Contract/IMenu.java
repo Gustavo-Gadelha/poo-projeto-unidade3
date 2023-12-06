@@ -8,9 +8,7 @@ public interface IMenu {
 
     void menuCliente(ICliente cliente);
 
-    void menuCarrinho(ICliente cliente);
+    void menuPedido(ICliente cliente);
 
     void menuVendedor(ICliente cliente);
-
-    void menuPedido(ICliente cliente);
 }

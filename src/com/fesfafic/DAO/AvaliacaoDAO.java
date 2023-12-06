@@ -1,6 +1,7 @@
 package com.fesfafic.DAO;
 
 import com.fesfafic.Contract.IDao;
+import com.fesfafic.Contract.IProduto;
 import com.fesfafic.Model.Avaliacao;
 
 import java.util.ArrayList;
@@ -26,6 +27,17 @@ public class AvaliacaoDAO implements IDao<Avaliacao> {
     @Override
     public ArrayList<Avaliacao> listarTodos() {
         return new ArrayList<>(avaliacoes);
+    }
+
+    public ArrayList<Avaliacao> listarPorProduto(IProduto produto) {
+        ArrayList<Avaliacao> lista = new ArrayList<>();
+        for (Avaliacao avaliacao : avaliacoes) {
+            if (avaliacao.getProduto() == produto) {
+                lista.add(avaliacao);
+            }
+        }
+
+        return lista;
     }
 
     @Override

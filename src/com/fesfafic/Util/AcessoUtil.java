@@ -51,6 +51,8 @@ public class AcessoUtil {
             throw new AtributoVazioException("E-mail não pode está em branco");
         } else if (senha.isBlank()) {
             throw new AtributoVazioException("Senha não pode está em branco");
+        } else if (email.equalsIgnoreCase(senha)) {
+            throw new CadastroException("E-mail e Senha não podem ser iguais");
         }
 
         for (Cliente cliente : clientes) {

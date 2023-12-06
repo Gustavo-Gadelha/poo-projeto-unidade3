@@ -38,7 +38,7 @@ public class ProdutoDAO implements IDao<Produto> {
     }
 
     public ArrayList<Produto> listarPorCliente(ICliente cliente) {
-        ArrayList<Produto> lista= new ArrayList<>();
+        ArrayList<Produto> lista = new ArrayList<>();
         for (Produto produto : produtos) {
             if (produto.getVendedor() == cliente) {
                 lista.add(produto);

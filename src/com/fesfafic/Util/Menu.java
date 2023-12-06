@@ -3,13 +3,8 @@ package com.fesfafic.Util;
 import com.fesfafic.Contract.ICliente;
 import com.fesfafic.Contract.IMenu;
 import com.fesfafic.Controller.*;
-import com.fesfafic.Exception.AtributoVazioException;
-import com.fesfafic.Exception.CadastroException;
-import com.fesfafic.Exception.ProdutoException;
-import com.fesfafic.Model.Avaliacao;
-import com.fesfafic.Model.Carrinho;
-import com.fesfafic.Model.Cliente;
-import com.fesfafic.Model.Produto;
+import com.fesfafic.Exception.*;
+import com.fesfafic.Model.*;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -19,8 +14,8 @@ public class Menu implements IMenu {
     private static AdministradorController administradorController;
     private static ProdutoController produtoController;
     private static CouponsController couponsController;
+    private static ReciboController reciboController;
     private static PedidoController pedidoController;
-    private static CarrinhoController carrinhoController;
     private static AvaliacaoController avaliacaoController;
     private final static Scanner lineScanner = new Scanner(System.in);
 
@@ -28,9 +23,9 @@ public class Menu implements IMenu {
         clienteController = new ClienteController();
         administradorController = new AdministradorController();
         produtoController = new ProdutoController();
-        couponsController = new CouponsController();
         pedidoController = new PedidoController();
-        carrinhoController = new CarrinhoController();
+        couponsController = new CouponsController();
+        reciboController = new ReciboController();
         avaliacaoController = new AvaliacaoController();
     }
 
@@ -135,14 +130,6 @@ public class Menu implements IMenu {
             // Lista de produtos
             ArrayList<Produto> produtos = produtoController.listarTodos();
 
-            // Busca carrinho de compras do Cliente
-            // Caso não exista, um novo carrinho é criado
-            Carrinho carrinho = carrinhoController.get(cliente);
-            if (carrinho == null) {
-                carrinho = new Carrinho(cliente);
-                carrinhoController.adicionar(carrinho);
-            }
-
             // Logica para mostrar lista de produtos
             // Só é exibida se: a lista nãp estiver vazia E mostrarProdutos for verdadeiro
             // Caso a lista esteja vazia, não é exibida independente do valor de mostrarProdutos
@@ -156,10 +143,10 @@ public class Menu implements IMenu {
                     
                     0. Sair
                     1. Mostrar/Ocultar Produtos
-                    2. Adicionar Produto ao carrinho
+                    2. Fazer Pedido
                     3. Avaliar Produto
-                    4. Ver Carrinho
-                    5. Verificar Pedido
+                    4. Ver Avaliações de um Produto
+                    5. Ver Pedidos
                     """
             );
 
@@ -179,13 +166,18 @@ public class Menu implements IMenu {
                     break;
                 }
 
-                // 2. Adicionar Produto ao carrinho
+                // 2. Fazer Pedido
                 case "2": {
                     // Possíveis erros: Índice menor que 0, Índice maior que tamanho da lista
+                    // Possível erro: Quantidade menor ou igual a 0
+                    // Possível erro: Quantidade maior que quantidade do produto
+                    // Possível Erro: Vendedor fazendo um pedido do próprio produto
                     try {
                         int indice = ProdutoUtil.pedirIndice(produtos.size());
-                        carrinho.adicionarProduto(produtoController.get(indice));
-                    } catch (IndexOutOfBoundsException | NumberFormatException e) {
+                        Pedido pedido = PedidoUtil.fazerPedido(cliente, produtoController.get(indice));
+                        pedidoController.adicionar(pedido);
+                    } catch (IndexOutOfBoundsException | NumberFormatException |
+                             PedidoException | VendedorException e) {
                         System.err.println("ERRO: " + e);
                         System.err.println("Abortando...\n");
                     }
@@ -196,25 +188,34 @@ public class Menu implements IMenu {
                 case "3": {
                     // Possíveis erros: Índice menor que 0, Índice maior que tamanho da lista
                     // Possível Erro: Conteúdo da avaliação vazío
+                    // Possível Erro: Vendedor avaliando o próprio produto
                     try {
                         int indice = ProdutoUtil.pedirIndice(produtos.size());
-                        Avaliacao avaliacao = ProdutoUtil.pedirAvaliacao(cliente, produtoController.get(indice));
+                        Avaliacao avaliacao = AvaliacaoUtil.pedirAvaliacao(cliente, produtoController.get(indice));
                         avaliacaoController.adicionar(avaliacao);
                     } catch (IndexOutOfBoundsException | NumberFormatException |
-                             AtributoVazioException e) {
+                             AtributoVazioException | VendedorException e) {
                         System.err.println("ERRO: " + e);
                         System.err.println("Abortando...\n");
                     }
                     break;
                 }
 
-                // 4. Ver Carrinho
+                // 4. Ver Avaliações de um Produto
                 case "4": {
-                    menuCarrinho(cliente);
+                    // Possíveis erros: Índice menor que 0, Índice maior que tamanho da lista
+                    try {
+                        int indice = ProdutoUtil.pedirIndice(produtos.size());
+                        Produto produto = produtoController.get(indice);
+                        AvaliacaoUtil.exibirAvaliacoes(avaliacaoController.listarPorProduto(produto));
+                    } catch (IndexOutOfBoundsException | NumberFormatException e) {
+                        System.err.println("ERRO: " + e);
+                        System.err.println("Abortando...\n");
+                    }
                     break;
                 }
 
-                // 5. Verificar Pedido
+                // 5. Ver Pedidos
                 case "5": {
                     menuPedido(cliente);
                     break;
@@ -295,6 +296,7 @@ public class Menu implements IMenu {
                     try {
                         int indice = ProdutoUtil.pedirIndice(produtos.size());
                         Produto produto = produtoController.get(indice);
+                        pedidoController.removerPorProduto(produto);
                         produtoController.remover(produto);
                     } catch (IndexOutOfBoundsException | NumberFormatException e) {
                         System.err.println("ERRO: " + e);
@@ -328,30 +330,28 @@ public class Menu implements IMenu {
     }
 
     @Override
-    public void menuCarrinho(ICliente cliente) {
+    public void menuPedido(ICliente cliente) {
         String escolha;
-        boolean mostrarProdutos = true;
+        boolean mostrarPedidos = true;
         do {
-            // Carrinho do cliente
-            Carrinho carrinho = carrinhoController.get(cliente);
+            // Lista de pedidos
+            ArrayList<Pedido> pedidos = pedidoController.listarPorCliente(cliente);
 
-            // Lista de produtos no carrinho
-            ArrayList<Produto> produtos = carrinho.getProdutos();
+            // Logica para mostrar lista de pedidos
+            // Só é exibida se: a lista não estiver vazia E mostrarPedidos for verdadeiro
+            // Caso a lista esteja vazia, não é exibida independente do valor de mostrarPedidos
+            PedidoUtil.exibirPedidos(pedidos, mostrarPedidos);
 
-            // Logica para mostrar lista de produtos do Carrinho
-            // Só é exibida se: a lista nãp estiver vazia E mostrarProdutos for verdadeiro
-            // Caso a lista esteja vazia, não é exibida independente do valor de mostrarProdutos
-            ProdutoUtil.exibirProdutos(produtos, mostrarProdutos);
-
-            // Menu do Carrinho
+            // Menu de pedidos
             System.out.println(
                     """
                     
-                    ================ Carrinho de compras ================
+                    ================ Menu de Pedidos ================
                     
                     0. Sair
-                    1. Mostrar/Ocultar Produtos
-                    2. Remover Produto
+                    1. Mostrar/Ocultar Pedidos
+                    2. Remover Pedido
+                    3. Finalizar Compra
                     """
             );
 
@@ -364,23 +364,29 @@ public class Menu implements IMenu {
                     break;
                 }
 
-                // 1. Mostrar/Ocultar Produtos
+                // 1. Mostrar/Ocultar Pedidos
                 case "1": {
                     // Novo valor = Inverso do Valor Atual
-                    mostrarProdutos = !mostrarProdutos;
+                    mostrarPedidos = !mostrarPedidos;
                     break;
                 }
 
-                // 2. Remover Produto
+                // 2. Remover Pedido
                 case "2": {
                     // Possíveis erros: Índice menor que 0, Índice maior que tamanho da lista
                     try {
-                        int indice = ProdutoUtil.pedirIndice(produtos.size());
-                        carrinho.removerProduto(indice);
+                        int indice = ProdutoUtil.pedirIndice(pedidos.size());
+                        pedidoController.remover(pedidoController.get(indice));
                     } catch (IndexOutOfBoundsException | NumberFormatException e) {
                         System.err.println("ERRO: " + e);
                         System.err.println("Abortando...\n");
                     }
+                    break;
+                }
+
+                // 3. Finalizar Compra
+                case "3": {
+                    System.out.println("WIP");
                     break;
                 }
 
@@ -391,10 +397,5 @@ public class Menu implements IMenu {
             }
 
         } while (!escolha.equals("0"));
-    }
-
-    @Override
-    public void menuPedido(ICliente cliente) {
-
     }
 }

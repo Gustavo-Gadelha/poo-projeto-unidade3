@@ -1,21 +1,18 @@
 package com.fesfafic.Contract;
 
-import java.util.ArrayList;
 import java.util.UUID;
 
 public interface IPedido {
 
     double calcularValor();
 
-    boolean adicionarCoupon(ICoupon coupon);
-
     UUID getId();
 
-    ICliente getRecipiente();
+    ICliente getCliente();
 
-    ArrayList<IProduto> getProdutos();
+    IProduto getProduto();
 
-    ArrayList<ICoupon> getCoupons();
+    int getQuantidade();
 
-    double getValor();
+    void setQuantidade(int quantidade);
 }

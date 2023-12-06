@@ -1,6 +1,7 @@
 package com.fesfafic.Controller;
 
 import com.fesfafic.Contract.IController;
+import com.fesfafic.Contract.IProduto;
 import com.fesfafic.DAO.AvaliacaoDAO;
 import com.fesfafic.Model.Avaliacao;
 
@@ -22,6 +23,10 @@ public class AvaliacaoController implements IController<Avaliacao> {
     @Override
     public ArrayList<Avaliacao> listarTodos() {
         return dao.listarTodos();
+    }
+
+    public ArrayList<Avaliacao> listarPorProduto(IProduto produto) {
+        return dao.listarPorProduto(produto);
     }
 
     @Override

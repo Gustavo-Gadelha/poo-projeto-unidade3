@@ -1,46 +1,28 @@
 package com.fesfafic.Model;
 
 import com.fesfafic.Contract.ICliente;
-import com.fesfafic.Contract.ICoupon;
 import com.fesfafic.Contract.IPedido;
 import com.fesfafic.Contract.IProduto;
 
-import java.util.ArrayList;
 import java.util.UUID;
 
 public class Pedido implements IPedido {
     private UUID id;
-    private ICliente recipiente;
-    private ArrayList<IProduto> produtos;
-    private ArrayList<ICoupon> coupons;
-    private double valor;
+    private ICliente cliente;
+    private IProduto produto;
+    private int quantidade;
 
-    public Pedido(ICliente recipiente, ArrayList<IProduto> produtos) {
+    public Pedido(ICliente cliente, IProduto produto, int quantidade) {
         this.id = UUID.randomUUID();
-        this.recipiente = recipiente;
-        this.produtos = produtos;
-        this.coupons = new ArrayList<>();
-        this.valor = calcularValor();
+        this.cliente = cliente;
+        this.produto = produto;
+        this.quantidade = quantidade;
+        produto.setQuantidade(produto.getQuantidade() - this.quantidade);
     }
 
     @Override
     public double calcularValor() {
-        double valor = 0;
-        for (IProduto produto : this.produtos) {
-            valor += produto.getValor();
-        }
-
-        double desconto = 1;
-        for (ICoupon coupon : this.coupons) {
-            desconto -= coupon.getDesconto();
-        }
-
-        return valor*desconto;
-    }
-
-    @Override
-    public boolean adicionarCoupon(ICoupon coupon) {
-        return this.coupons.add(coupon);
+        return this.produto.getValor() * this.quantidade;
     }
 
     @Override
@@ -49,22 +31,22 @@ public class Pedido implements IPedido {
     }
 
     @Override
-    public ICliente getRecipiente() {
-        return recipiente;
+    public ICliente getCliente() {
+        return cliente;
     }
 
     @Override
-    public ArrayList<IProduto> getProdutos() {
-        return produtos;
+    public IProduto getProduto() {
+        return produto;
     }
 
     @Override
-    public ArrayList<ICoupon> getCoupons() {
-        return coupons;
+    public int getQuantidade() {
+        return quantidade;
     }
 
     @Override
-    public double getValor() {
-        return valor;
+    public void setQuantidade(int quantidade) {
+        this.quantidade = quantidade;
     }
 }

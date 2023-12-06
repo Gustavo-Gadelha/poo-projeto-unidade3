@@ -1,9 +1,7 @@
 package com.fesfafic.Util;
 
-import com.fesfafic.Contract.ICliente;
-import com.fesfafic.Contract.IProduto;
 import com.fesfafic.Exception.AtributoVazioException;
-import com.fesfafic.Model.Avaliacao;
+import com.fesfafic.Exception.ProdutoException;
 import com.fesfafic.Model.Produto;
 
 import java.util.ArrayList;
@@ -30,20 +28,48 @@ public class ProdutoUtil {
         return indice;
     }
 
-    public static Avaliacao pedirAvaliacao(ICliente cliente, IProduto produto) throws AtributoVazioException {
-        System.out.print("Digite o conteúdo da sua avaliação: ");
-        String conteudo = lineScanner.nextLine().strip();
-
-        // checa se o conteúdo da avaliação é vazio
-        if (conteudo.isBlank()) {
-            throw new AtributoVazioException("O conteúdo da avaliação não pode estar em branco");
+    public static String pedirNome() throws AtributoVazioException {
+        // Nome do produto, não pode estar em branco
+        System.out.print("Digite o nome do produto: ");
+        String nome = lineScanner.nextLine().strip();
+        if (nome.isBlank()) {
+            throw new AtributoVazioException("Nome do produto não pode estar em branco");
         }
+        return nome;
+    }
 
-        return new Avaliacao(cliente, produto, conteudo);
+    public static double pedirValor() throws ProdutoException, NumberFormatException {
+        // Valor do produto, deve ser um número decimal e maior que zero
+        System.out.print("Digite o valor do produto: ");
+        double valor;
+        try {
+            valor = Double.parseDouble(lineScanner.nextLine());
+            if (valor <= 0) {
+                throw new ProdutoException("Valor do produto deve ser maior que zero");
+            }
+        } catch (NumberFormatException e) {
+            throw new NumberFormatException("Valor do produto deve ser ser um número decimal");
+        }
+        return valor;
+    }
+
+    public static int pedirQuantidade() throws ProdutoException, NumberFormatException {
+        // Quantidade do produto, deve ser um número inteiro e maior que zero
+        System.out.print("Digite a quantidade do produto: ");
+        int quantidade;
+        try {
+            quantidade = Integer.parseInt(lineScanner.nextLine());
+            if (quantidade <= 0) {
+                throw new ProdutoException("Quantidade do produto deve ser maior que zero");
+            }
+        } catch (NumberFormatException e) {
+            throw new NumberFormatException("Quantidade do produto deve ser um número inteiro");
+        }
+        return quantidade;
     }
 
     public static void exibirProdutos(ArrayList<Produto> produtos, boolean mostrarProdutos) {
-        // Se mostrarProdutos for falso, retorne
+        // Se mostrarProdutos for falso, retorne sem exibir
         if (!mostrarProdutos) {
             return;
         }
@@ -52,16 +78,14 @@ public class ProdutoUtil {
         if (produtos.isEmpty()) {
             System.out.println("Nenhum produto registrado");
         } else {
-            int contador = 0;
             System.out.printf("%3s | %-20s | %10s | %3s\n","IND", "Produto", "Valor", "QTD");
             for (Produto produto : produtos) {
                 System.out.printf("%03d | %-20s | R$%8.2f | %03d\n",
-                        contador,
+                        produtos.indexOf(produto),
                         produto.getNome(),
                         produto.getValor(),
                         produto.getQuantidade()
                 );
-                contador++;
             }
         }
     }
