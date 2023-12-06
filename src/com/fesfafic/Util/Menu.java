@@ -1,5 +1,6 @@
 package com.fesfafic.Util;
 
+import com.fesfafic.Contract.IAdministrador;
 import com.fesfafic.Contract.ICliente;
 import com.fesfafic.Contract.IMenu;
 import com.fesfafic.Controller.*;
@@ -13,7 +14,7 @@ public class Menu implements IMenu {
     private static ClienteController clienteController;
     private static AdministradorController administradorController;
     private static ProdutoController produtoController;
-    private static CouponsController couponsController;
+    private static CouponController couponController;
     private static ReciboController reciboController;
     private static PedidoController pedidoController;
     private static AvaliacaoController avaliacaoController;
@@ -24,9 +25,14 @@ public class Menu implements IMenu {
         administradorController = new AdministradorController();
         produtoController = new ProdutoController();
         pedidoController = new PedidoController();
-        couponsController = new CouponsController();
+        couponController = new CouponController();
         reciboController = new ReciboController();
         avaliacaoController = new AvaliacaoController();
+
+        // Administrador Padrão
+        administradorController.adicionar(
+                new Administrador("Exemplo@email.com", "admin@123", "@POO21")
+        );
     }
 
     @Override
@@ -42,12 +48,12 @@ public class Menu implements IMenu {
                     1. Fazer Cadastro
                     2. Acessar Menu do Cliente
                     3. Acessar Menu do Vendedor
-                    4. Acessar como Administrador
+                    4. Acessar Menu do Administrador
                     """
             );
 
             System.out.print("Digite sua escolha: ");
-            escolha = lineScanner.nextLine();
+            escolha = lineScanner.nextLine().strip();
 
             switch (escolha) {
                 // 0. Sair
@@ -58,8 +64,8 @@ public class Menu implements IMenu {
 
                 // 1. Fazer Cadastro
                 case "1": {
+                    // Possíveis erros: E-mail ou Senha em branco
                     // Possível erro: E-mail já cadastrado
-                    // Possíveis erros: Senha ou E-mail em branco
                     try {
                         Cliente cliente = AcessoUtil.pedirCadastro(clienteController.listarTodos());
                         if (clienteController.adicionar(cliente)) {
@@ -77,7 +83,7 @@ public class Menu implements IMenu {
                 // 2. Acessar Menu do Cliente
                 case "2": {
                     try {
-                        // Possíveis erros: Senha ou E-mail em branco
+                        // Possíveis erros: E-mail ou Senha em branco
                         Cliente cliente = AcessoUtil.pedirLogin(clienteController.listarTodos());
                         if (cliente != null) {
                             menuCliente(cliente);
@@ -91,7 +97,7 @@ public class Menu implements IMenu {
 
                 // 3. Acessar Menu do Vendedor
                 case "3": {
-                    // Possíveis erros: Senha ou E-mail em branco
+                    // Possíveis erros: E-mail ou Senha em branco
                     try {
                         Cliente cliente = AcessoUtil.pedirLogin(clienteController.listarTodos());
                         if (cliente != null) {
@@ -104,9 +110,18 @@ public class Menu implements IMenu {
                     break;
                 }
 
-                // 4. Acessar como Administrador
+                // 4. Acessar Menu do Administrador
                 case "4": {
-                    menuAdministrador();
+                    // Possíveis erros: E-mail ou Senha em branco
+                    try {
+                        Administrador administrador = AcessoUtil.pedirAdmnistrador(administradorController.listarTodos());
+                        if (administrador != null) {
+                            menuAdministrador(administrador);
+                        }
+                    } catch (AtributoVazioException e) {
+                        System.err.println("ERRO: " + e);
+                        System.err.println("Abortando...\n");
+                    }
                     break;
                 }
 
@@ -119,7 +134,94 @@ public class Menu implements IMenu {
     }
 
     @Override
-    public void menuAdministrador() {
+    public void menuAdministrador(IAdministrador administrador) {
+        String escolha;
+        do {
+            System.out.println(
+                    """
+                    
+                    ================ Menu do Administrador ================
+                    
+                    0. Sair
+                    1. Criar Coupon
+                    2. Remover Coupon
+                    3. Cadastrar Administrador
+                    4. Remover Administrador
+                    """
+            );
+
+            System.out.print("Digite sua escolha: ");
+            escolha = lineScanner.nextLine().strip();
+
+            switch (escolha) {
+                // 0. Sair
+                case "0": {
+                    break;
+                }
+
+                // 1. Criar Coupon
+                case "1": {
+                    // Possível erro: Código não possui exatamente 8 caracteres
+                    // Possível erro: Desconto maior que 100
+                    // Possível erro: Desconto menor ou igual a 0
+                    try {
+                        Coupon coupon = CouponUtil.criarCoupon();
+                        couponController.adicionar(coupon);
+                    } catch (CouponException | NumberFormatException e) {
+                        System.err.println("ERRO: " + e);
+                        System.err.println("Abortando...\n");
+                    }
+                    break;
+                }
+
+                // 2. Remover Coupon
+                case "2": {
+                    // Possível erro: Código não possui exatamente 8 caracteres
+                    try {
+                        Coupon coupon = couponController.get(CouponUtil.pedirCodigo());
+                        couponController.remover(coupon);
+                    } catch (CouponException | NumberFormatException e) {
+                        System.err.println("ERRO: " + e);
+                        System.err.println("Abortando...\n");
+                    }
+                    break;
+                }
+
+                // 3. Cadastrar Administrador
+                case "3": {
+                    // Possíveis erros: E-mail, Senha ou Código de Acesso em branco
+                    // Possível erro: E-mail já registrado
+                    // Possível erro: Código de acesso já registrado
+                    try {
+                        Administrador admin = AcessoUtil.cadastrarAdministrador(administradorController.listarTodos());
+                        administradorController.adicionar(admin);
+                    } catch (CadastroException | AtributoVazioException e) {
+                        System.err.println("ERRO: " + e);
+                        System.err.println("Abortando...\n");
+                    }
+                    break;
+                }
+
+                // 4. Remover Administrador
+                case "4": {
+                    // Possíveis erros: E-mail, Senha ou Código de Acesso em branco
+                    try {
+                        String codigoDeAcesso = AcessoUtil.pedirCodigoDeAcesso();
+                        Administrador admin = administradorController.get(codigoDeAcesso);
+                        administradorController.remover(admin);
+                    } catch (AtributoVazioException e) {
+                        System.err.println("ERRO: " + e);
+                        System.err.println("Abortando...\n");
+                    }
+                    break;
+                }
+
+                default: {
+                    System.out.println("Entrada inválida! Digite novamente");
+                    break;
+                }
+            }
+        } while (!escolha.equals("0"));
     }
 
     @Override
@@ -151,7 +253,7 @@ public class Menu implements IMenu {
             );
 
             System.out.print("Digite sua escolha: ");
-            escolha = lineScanner.nextLine();
+            escolha = lineScanner.nextLine().strip();
 
             switch (escolha) {
                 // 0. Sair
@@ -260,7 +362,7 @@ public class Menu implements IMenu {
             );
 
             System.out.print("Digite sua escolha: ");
-            escolha = lineScanner.nextLine();
+            escolha = lineScanner.nextLine().strip();
 
             switch (escolha) {
                 // 0. Sair
@@ -356,7 +458,7 @@ public class Menu implements IMenu {
             );
 
             System.out.print("Digite sua escolha: ");
-            escolha = lineScanner.nextLine();
+            escolha = lineScanner.nextLine().strip();
 
             switch (escolha) {
                 // 0. Sair

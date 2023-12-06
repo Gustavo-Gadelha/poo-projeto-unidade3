@@ -23,6 +23,15 @@ public class AdministradorDAO implements IDao<Administrador> {
         return null;
     }
 
+    public Administrador get(String codigoDeAcesso) {
+        for (Administrador administrador : administradores) {
+            if (administrador.getCodigoDeAcesso().equalsIgnoreCase(codigoDeAcesso)) {
+                return administrador;
+            }
+        }
+        return null;
+    }
+
     @Override
     public ArrayList<Administrador> listarTodos() {
         return new ArrayList<>(administradores);

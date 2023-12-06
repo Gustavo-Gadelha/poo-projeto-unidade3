@@ -19,6 +19,10 @@ public class AdministradorController implements IController<Administrador> {
         return dao.get(id);
     }
 
+    public Administrador get(String codigoDeAcesso) {
+        return dao.get(codigoDeAcesso);
+    }
+
     @Override
     public ArrayList<Administrador> listarTodos() {
         return dao.listarTodos();

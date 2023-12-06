@@ -6,10 +6,10 @@ import com.fesfafic.Model.Coupon;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class CouponsDAO implements IDao<Coupon> {
+public class CouponDAO implements IDao<Coupon> {
     private ArrayList<Coupon> coupons;
 
-    public CouponsDAO() {
+    public CouponDAO() {
         this.coupons = new ArrayList<>();
     }
 
@@ -17,6 +17,15 @@ public class CouponsDAO implements IDao<Coupon> {
     public Coupon get(UUID id) {
         for (Coupon coupon : coupons) {
             if (coupon.getId() == id) {
+                return coupon;
+            }
+        }
+        return null;
+    }
+
+    public Coupon get(String codigo) {
+        for (Coupon coupon : coupons) {
+            if (coupon.getCodigo().equalsIgnoreCase(codigo)) {
                 return coupon;
             }
         }

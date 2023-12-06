@@ -2,7 +2,7 @@ package com.fesfafic.Contract;
 
 public interface IAdministrador {
 
-    String getCodigoDeAcesso();
+    boolean fazerLogin(String email, String senha, String codigoDeAcesso);
 
-    int getNivel();
+    String getCodigoDeAcesso();
 }

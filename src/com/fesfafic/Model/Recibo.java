@@ -10,14 +10,14 @@ import java.util.UUID;
 
 public class Recibo implements IRecibo {
     private UUID id;
-    private ICliente recipiente;
+    private ICliente cliente;
     private ArrayList<IPedido> pedidos;
     private ArrayList<ICoupon> coupons;
     private double valor;
 
-    public Recibo(ICliente recipiente, ArrayList<IPedido> pedidos, ArrayList<ICoupon> coupons, double valor) {
+    public Recibo(ICliente cliente, ArrayList<IPedido> pedidos, ArrayList<ICoupon> coupons, double valor) {
         this.id = UUID.randomUUID();
-        this.recipiente = recipiente;
+        this.cliente = cliente;
         this.pedidos = pedidos;
         this.coupons = coupons;
         this.valor = valor;
@@ -29,8 +29,8 @@ public class Recibo implements IRecibo {
     }
 
     @Override
-    public ICliente getRecipiente() {
-        return recipiente;
+    public ICliente getCliente() {
+        return cliente;
     }
 
     @Override

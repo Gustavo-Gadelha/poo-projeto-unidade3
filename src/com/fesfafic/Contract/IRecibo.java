@@ -7,7 +7,7 @@ public interface IRecibo {
 
     UUID getId();
 
-    ICliente getRecipiente();
+    ICliente getCliente();
 
     ArrayList<IPedido> getPedidos();
 

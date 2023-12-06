@@ -1,22 +1,26 @@
 package com.fesfafic.Controller;
 
 import com.fesfafic.Contract.IController;
-import com.fesfafic.DAO.CouponsDAO;
+import com.fesfafic.DAO.CouponDAO;
 import com.fesfafic.Model.Coupon;
 
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class CouponsController implements IController<Coupon> {
-    private final CouponsDAO dao;
+public class CouponController implements IController<Coupon> {
+    private final CouponDAO dao;
 
-    public CouponsController() {
-        this.dao = new CouponsDAO();
+    public CouponController() {
+        this.dao = new CouponDAO();
     }
 
     @Override
     public Coupon get(UUID id) {
         return dao.get(id);
+    }
+
+    public Coupon get(String codigo) {
+        return dao.get(codigo);
     }
 
     @Override

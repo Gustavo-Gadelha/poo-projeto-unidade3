@@ -14,7 +14,7 @@ public class ProdutoUtil {
         int indice;
         System.out.print("Digite o índice do produto: ");
         try {
-            indice = Integer.parseInt(lineScanner.nextLine());
+            indice = Integer.parseInt(lineScanner.nextLine().strip());
         } catch (NumberFormatException e) {
             throw new NumberFormatException("Valor do índice dever ser um número inteiro");
         }
@@ -43,13 +43,15 @@ public class ProdutoUtil {
         System.out.print("Digite o valor do produto: ");
         double valor;
         try {
-            valor = Double.parseDouble(lineScanner.nextLine());
-            if (valor <= 0) {
-                throw new ProdutoException("Valor do produto deve ser maior que zero");
-            }
+            valor = Double.parseDouble(lineScanner.nextLine().strip());
         } catch (NumberFormatException e) {
             throw new NumberFormatException("Valor do produto deve ser ser um número decimal");
         }
+
+        if (valor <= 0) {
+            throw new ProdutoException("Valor do produto deve ser maior que zero");
+        }
+
         return valor;
     }
 
@@ -58,13 +60,15 @@ public class ProdutoUtil {
         System.out.print("Digite a quantidade do produto: ");
         int quantidade;
         try {
-            quantidade = Integer.parseInt(lineScanner.nextLine());
-            if (quantidade <= 0) {
-                throw new ProdutoException("Quantidade do produto deve ser maior que zero");
-            }
+            quantidade = Integer.parseInt(lineScanner.nextLine().strip());
         } catch (NumberFormatException e) {
             throw new NumberFormatException("Quantidade do produto deve ser um número inteiro");
         }
+
+        if (quantidade <= 0) {
+            throw new ProdutoException("Quantidade do produto deve ser maior que zero");
+        }
+
         return quantidade;
     }
 

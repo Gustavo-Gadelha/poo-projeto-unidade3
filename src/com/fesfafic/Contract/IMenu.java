@@ -1,10 +1,12 @@
 package com.fesfafic.Contract;
 
+import com.fesfafic.Model.Administrador;
+
 public interface IMenu {
 
     void menuInicial();
 
-    void menuAdministrador();
+    void menuAdministrador(IAdministrador administrador);
 
     void menuCliente(ICliente cliente);
 
