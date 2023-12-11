@@ -8,12 +8,12 @@ Projeto para 3ª Avaliação de Programação Orientada a Objetos
 
 **Data de entrega**: 11/12/2023 até 18:40
 
+> [!WARNING]
+> Caso haja alteração no código após 18:40 de 11/12/2023, o projeto será automaticamente zerado
+
 ### Projeto exemplo
 
 https://github.com/ejrgeek/TamagotchiPOOJava
-
-> [!WARNING]
-> Caso haja alteração no código após esse horário, automaticamente será zerado
 
 ## Observação
 
@@ -33,7 +33,7 @@ Escolham um tema e coloquem nos comentários de forma pública o tema escolhido
 - Será avaliado também o uso das convenções e padrões do Java ensinados em sala e contidos nos slides
 
 > [!IMPORTANT]
-> Deve conter no mínimo 6 classes, 4 interfaces, 6 DAOs e o Padrão Model e Controller e implementados;
+> Deve conter no mínimo 6 classes, 4 interfaces, 6 DAOs e o Padrão Model e Controller e implementados
 
 ## Dupla
 
