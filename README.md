@@ -11,16 +11,11 @@ Projeto para 3ª Avaliação de Programação Orientada a Objetos
 > [!WARNING]
 > Caso haja alteração no código após 18:40 de 11/12/2023, o projeto será automaticamente zerado
 
-### Projeto exemplo
-
-https://github.com/ejrgeek/TamagotchiPOOJava
-
 ## Observação
 
 Escolham um tema e coloquem nos comentários de forma pública o tema escolhido
 
 ![Imgur](https://i.imgur.com/sMpe8tz.png)
-
 
 ## Métodos de avaliação
 
@@ -39,3 +34,7 @@ Escolham um tema e coloquem nos comentários de forma pública o tema escolhido
 
 - _Gustavo Gadelha_
 - _Diego Gadelha_
+
+## Projeto exemplo
+
+https://github.com/ejrgeek/TamagotchiPOOJava
