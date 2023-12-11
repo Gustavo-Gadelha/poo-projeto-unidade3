@@ -3,6 +3,7 @@ package com.fesfafic.Util;
 import com.fesfafic.Contract.IAdministrador;
 import com.fesfafic.Contract.ICliente;
 import com.fesfafic.Contract.IMenu;
+import com.fesfafic.Contract.IProduto;
 import com.fesfafic.Controller.*;
 import com.fesfafic.Exception.*;
 import com.fesfafic.Model.*;
@@ -31,7 +32,7 @@ public class Menu implements IMenu {
 
         // Administrador Padrão
         administradorController.adicionar(
-                new Administrador("Exemplo@email.com", "admin@123", "@POO21")
+                new Administrador("Exemplo@email.com", "admin@123", "@POO2023")
         );
     }
 
@@ -206,8 +207,7 @@ public class Menu implements IMenu {
                 case "4": {
                     // Possíveis erros: E-mail, Senha ou Código de Acesso em branco
                     try {
-                        String codigoDeAcesso = AcessoUtil.pedirCodigoDeAcesso();
-                        Administrador admin = administradorController.get(codigoDeAcesso);
+                        Administrador admin = administradorController.get(AcessoUtil.pedirCodigoDeAcesso());
                         administradorController.remover(admin);
                     } catch (AtributoVazioException e) {
                         System.err.println("ERRO: " + e);
@@ -249,9 +249,12 @@ public class Menu implements IMenu {
                     3. Avaliar Produto
                     4. Ver Avaliações de um Produto
                     5. Ver Pedidos
+                    6. Depositar na conta
+                    7. Emitir Recibo
                     """
             );
 
+            System.out.println("Saldo: " + cliente.getSaldo());
             System.out.print("Digite sua escolha: ");
             escolha = lineScanner.nextLine().strip();
 
@@ -275,8 +278,8 @@ public class Menu implements IMenu {
                     // Possível erro: Quantidade maior que quantidade do produto
                     // Possível Erro: Vendedor fazendo um pedido do próprio produto
                     try {
-                        int indice = ProdutoUtil.pedirIndice(produtos.size());
-                        Pedido pedido = PedidoUtil.fazerPedido(cliente, produtoController.get(indice));
+                        Produto produto = produtoController.get(ProdutoUtil.pedirIndice(produtos.size()));
+                        Pedido pedido = PedidoUtil.fazerPedido(cliente, produto);
                         pedidoController.adicionar(pedido);
                     } catch (IndexOutOfBoundsException | NumberFormatException |
                              PedidoException | VendedorException e) {
@@ -292,8 +295,8 @@ public class Menu implements IMenu {
                     // Possível Erro: Conteúdo da avaliação vazío
                     // Possível Erro: Vendedor avaliando o próprio produto
                     try {
-                        int indice = ProdutoUtil.pedirIndice(produtos.size());
-                        Avaliacao avaliacao = AvaliacaoUtil.pedirAvaliacao(cliente, produtoController.get(indice));
+                        Produto produto = produtoController.get(ProdutoUtil.pedirIndice(produtos.size()));
+                        Avaliacao avaliacao = AvaliacaoUtil.pedirAvaliacao(cliente, produto);
                         avaliacaoController.adicionar(avaliacao);
                     } catch (IndexOutOfBoundsException | NumberFormatException |
                              AtributoVazioException | VendedorException e) {
@@ -307,8 +310,7 @@ public class Menu implements IMenu {
                 case "4": {
                     // Possíveis erros: Índice menor que 0, Índice maior que tamanho da lista
                     try {
-                        int indice = ProdutoUtil.pedirIndice(produtos.size());
-                        Produto produto = produtoController.get(indice);
+                        Produto produto = produtoController.get(ProdutoUtil.pedirIndice(produtos.size()));
                         AvaliacaoUtil.exibirAvaliacoes(avaliacaoController.listarPorProduto(produto));
                     } catch (IndexOutOfBoundsException | NumberFormatException e) {
                         System.err.println("ERRO: " + e);
@@ -320,6 +322,24 @@ public class Menu implements IMenu {
                 // 5. Ver Pedidos
                 case "5": {
                     menuPedido(cliente);
+                    break;
+                }
+
+                // 6. Depositar na conta
+                case "6": {
+                    // Possível erro: Deposito menor que zero ou não é um número
+                    try {
+                        cliente.depositar(SaldoUtil.pedirDeposito());
+                    } catch (NumberFormatException | SaldoException e) {
+                        System.err.println("ERRO: " + e);
+                        System.err.println("Abortando...\n");
+                    }
+                    break;
+                }
+
+                // 7. Emitir Recibo
+                case "7": {
+                    menuRecibo(cliente);
                     break;
                 }
 
@@ -361,6 +381,7 @@ public class Menu implements IMenu {
                     """
             );
 
+            System.out.println("Saldo: " + cliente.getSaldo());
             System.out.print("Digite sua escolha: ");
             escolha = lineScanner.nextLine().strip();
 
@@ -396,9 +417,9 @@ public class Menu implements IMenu {
                 case "3": {
                     // Possíveis erros: Índice menor que 0, Índice maior que tamanho da lista
                     try {
-                        int indice = ProdutoUtil.pedirIndice(produtos.size());
-                        Produto produto = produtoController.get(indice);
+                        Produto produto = produtoController.get(ProdutoUtil.pedirIndice(produtos.size()));
                         pedidoController.removerPorProduto(produto);
+                        avaliacaoController.removerPorProduto(produto);
                         produtoController.remover(produto);
                     } catch (IndexOutOfBoundsException | NumberFormatException e) {
                         System.err.println("ERRO: " + e);
@@ -413,8 +434,8 @@ public class Menu implements IMenu {
                     // Possível erro: Nome do produto em branco
                     // Possível erro: Valor/Quantidade menor ou igual a 0
                     try {
-                        int indice = ProdutoUtil.pedirIndice(produtos.size());
-                        VendedorUtil.atualizarProduto(produtoController.get(indice));
+                        Produto produto = produtoController.get(ProdutoUtil.pedirIndice(produtos.size()));
+                        VendedorUtil.atualizarProduto(produto);
                     } catch (IndexOutOfBoundsException | NumberFormatException |
                              ProdutoException | AtributoVazioException e) {
                         System.err.println("ERRO: " + e);
@@ -453,10 +474,10 @@ public class Menu implements IMenu {
                     0. Sair
                     1. Mostrar/Ocultar Pedidos
                     2. Remover Pedido
-                    3. Finalizar Compra
                     """
             );
 
+            System.out.println("Saldo: " + cliente.getSaldo());
             System.out.print("Digite sua escolha: ");
             escolha = lineScanner.nextLine().strip();
 
@@ -477,18 +498,14 @@ public class Menu implements IMenu {
                 case "2": {
                     // Possíveis erros: Índice menor que 0, Índice maior que tamanho da lista
                     try {
-                        int indice = ProdutoUtil.pedirIndice(pedidos.size());
-                        pedidoController.remover(pedidoController.get(indice));
+                        Pedido pedido = pedidoController.get(ProdutoUtil.pedirIndice(pedidos.size()));
+                        IProduto produto = pedido.getProduto();
+                        produto.setQuantidade(produto.getQuantidade() + pedido.getQuantidade());
+                        pedidoController.remover(pedido);
                     } catch (IndexOutOfBoundsException | NumberFormatException e) {
                         System.err.println("ERRO: " + e);
                         System.err.println("Abortando...\n");
                     }
-                    break;
-                }
-
-                // 3. Finalizar Compra
-                case "3": {
-                    System.out.println("WIP");
                     break;
                 }
 
@@ -498,6 +515,92 @@ public class Menu implements IMenu {
                 }
             }
 
+        } while (!escolha.equals("0"));
+    }
+
+    @Override
+    public void menuRecibo(ICliente cliente) {
+        if (pedidoController.listarPorCliente(cliente).isEmpty()) {
+            System.out.println("Nenhum pedido registrado por este cliente");
+            return;
+        }
+
+        // Criação do recibo caso não exista
+        Recibo recibo = reciboController.get(cliente);
+        if (recibo == null) {
+            recibo = new Recibo(cliente);
+            reciboController.adicionar(recibo);
+        }
+
+        // Lista de pedidos
+        ArrayList<Pedido> pedidos = pedidoController.listarPorCliente(cliente);
+
+        String escolha;
+        do {
+            System.out.println(
+                    """
+                    
+                    ================ Emissão do Rebico ================
+                    
+                    0. Sair
+                    1. Inserir Coupon
+                    2. Finalizar Compras
+                    """
+            );
+
+            System.out.print("Digite sua escolha: ");
+            escolha = lineScanner.nextLine().strip();
+
+            switch (escolha) {
+                // 0. Sair
+                case "0": {
+                    break;
+                }
+
+                // 1. Inserir Coupon
+                case "1": {
+                    // Possível erro: código do cupom não tem 8 caracteres
+                    try {
+                        String codigo = CouponUtil.pedirCodigo();
+                        recibo.adicionarCoupon(couponController.get(codigo));
+                    } catch (CouponException e) {
+                        System.err.println("ERRO: " + e);
+                        System.err.println("Abortando...\n");
+                    }
+                    break;
+                }
+
+                // 2. Finalizar Compras
+                case "2": {
+                    try {
+                        double total = PedidoUtil.calcularTotal(pedidos);
+                        double desconto = PedidoUtil.calcularDesconto(recibo.getCoupons());
+                        if (cliente.getSaldo() < total*desconto) {
+                            throw new SaldoException(
+                                    String.format("Saldo Insuficiente, Deposite mais R$%.2f", total - cliente.getSaldo())
+                            );
+                        }
+
+                        for (Pedido pedido : pedidos) {
+                            IProduto produto = pedido.getProduto();
+                            cliente.transferirPara(produto.getVendedor(), pedido.getQuantidade() * produto.getValor() * desconto);
+                            pedidoController.remover(pedido);
+                        }
+
+                        recibo.adicionarPedidos(pedidos);
+                        recibo.setEmAberto(false);
+                    } catch (SaldoException e) {
+                        System.err.println("ERRO: " + e);
+                        System.err.println("Abortando...\n");
+                    }
+                    return;
+                }
+
+                default: {
+                    System.out.println("Entrada inválida! Digite novamente");
+                    break;
+                }
+            }
         } while (!escolha.equals("0"));
     }
 }

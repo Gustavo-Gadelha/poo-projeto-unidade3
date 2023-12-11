@@ -1,11 +1,11 @@
 package com.fesfafic.Util;
 
 import com.fesfafic.Contract.ICliente;
-import com.fesfafic.Contract.IPedido;
 import com.fesfafic.Contract.IProduto;
 import com.fesfafic.Exception.PedidoException;
 import com.fesfafic.Exception.ProdutoException;
 import com.fesfafic.Exception.VendedorException;
+import com.fesfafic.Model.Coupon;
 import com.fesfafic.Model.Pedido;
 
 import java.util.ArrayList;
@@ -38,7 +38,7 @@ public class PedidoUtil {
         } else {
             double total = 0;
             System.out.printf("%3s | %-20s | %10s | %3s\n","IND", "Produto", "Valor", "QTD Reservada");
-            for (IPedido pedido : pedidos) {
+            for (com.fesfafic.Contract.IPedido pedido : pedidos) {
                 System.out.printf("%03d | %-20s | R$%8.2f | %03d\n",
                         pedidos.indexOf(pedido),
                         pedido.getProduto().getNome(),
@@ -50,5 +50,25 @@ public class PedidoUtil {
             }
             System.out.printf("\nTotal: R$%.2f\n", total);
         }
+    }
+
+    public static double calcularTotal(ArrayList<Pedido> pedidos) {
+        double total = 0;
+        for (Pedido pedido : pedidos) {
+            total += pedido.calcularValor();
+        }
+        return total;
+    }
+
+    public static double calcularDesconto(ArrayList<Coupon> coupons) {
+        double desconto = 1;
+        for (Coupon coupon : coupons) {
+            desconto -= coupon.getDesconto();
+            if (desconto < 0) {
+                desconto = 0;
+                break;
+            }
+        }
+        return desconto;
     }
 }

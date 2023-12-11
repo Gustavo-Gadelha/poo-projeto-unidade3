@@ -2,7 +2,6 @@ package com.fesfafic.DAO;
 
 import com.fesfafic.Contract.ICliente;
 import com.fesfafic.Contract.IDao;
-import com.fesfafic.Contract.IProduto;
 import com.fesfafic.Model.Pedido;
 import com.fesfafic.Model.Produto;
 
@@ -76,8 +75,6 @@ public class PedidoDAO implements IDao<Pedido> {
 
     @Override
     public boolean remover(Pedido pedido) {
-        IProduto produto = pedido.getProduto();
-        produto.setQuantidade(produto.getQuantidade() + pedido.getQuantidade());
         return this.pedidos.remove(pedido);
     }
 

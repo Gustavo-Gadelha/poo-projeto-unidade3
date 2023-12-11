@@ -3,6 +3,7 @@ package com.fesfafic.DAO;
 import com.fesfafic.Contract.IDao;
 import com.fesfafic.Contract.IProduto;
 import com.fesfafic.Model.Avaliacao;
+import com.fesfafic.Model.Produto;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -48,5 +49,10 @@ public class AvaliacaoDAO implements IDao<Avaliacao> {
     @Override
     public boolean remover(Avaliacao avaliacao) {
         return avaliacoes.remove(avaliacao);
+    }
+
+    public boolean removerPorProduto(Produto produto) {
+        // Remove todos as avaliações de um certo produto
+        return avaliacoes.removeIf(avaliacao -> avaliacao.getProduto() == produto);
     }
 }

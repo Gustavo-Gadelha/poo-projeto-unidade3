@@ -1,5 +1,6 @@
 package com.fesfafic.DAO;
 
+import com.fesfafic.Contract.ICliente;
 import com.fesfafic.Contract.IDao;
 import com.fesfafic.Model.Recibo;
 
@@ -17,6 +18,15 @@ public class ReciboDAO implements IDao<Recibo> {
     public Recibo get(UUID id) {
         for (Recibo recibo : recibos) {
             if (recibo.getId() == id) {
+                return recibo;
+            }
+        }
+        return null;
+    }
+
+    public Recibo get(ICliente cliente) {
+        for (Recibo recibo : recibos) {
+            if (recibo.getCliente() == cliente && recibo.isEmAberto()) {
                 return recibo;
             }
         }

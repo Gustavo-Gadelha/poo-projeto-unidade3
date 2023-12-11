@@ -4,6 +4,7 @@ import com.fesfafic.Contract.IController;
 import com.fesfafic.Contract.IProduto;
 import com.fesfafic.DAO.AvaliacaoDAO;
 import com.fesfafic.Model.Avaliacao;
+import com.fesfafic.Model.Produto;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -37,5 +38,9 @@ public class AvaliacaoController implements IController<Avaliacao> {
     @Override
     public boolean remover(Avaliacao avaliacao) {
         return dao.remover(avaliacao);
+    }
+
+    public boolean removerPorProduto(Produto produto) {
+        return this.dao.removerPorProduto(produto);
     }
 }

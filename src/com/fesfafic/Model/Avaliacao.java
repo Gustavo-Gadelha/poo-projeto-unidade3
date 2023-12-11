@@ -10,8 +10,9 @@ import java.util.UUID;
 public class Avaliacao implements IAvaliacao {
     private UUID id;
     private ICliente cliente;
-    private String conteudo;
     private IProduto produto;
+    private String conteudo;
+
     public Avaliacao(ICliente cliente, IProduto produto, String conteudo) {
         this.id = UUID.randomUUID();
         this.cliente = cliente;
@@ -30,12 +31,13 @@ public class Avaliacao implements IAvaliacao {
     }
 
     @Override
+    public IProduto getProduto() {
+        return produto;
+    }
+
+    @Override
     public String getConteudo() {
         return conteudo;
     }
 
-    @Override
-    public IProduto getProduto() {
-        return produto;
-    }
 }

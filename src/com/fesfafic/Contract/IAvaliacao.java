@@ -8,7 +8,7 @@ public interface IAvaliacao {
 
     IUtilizador getCliente();
 
-    String getConteudo();
-
     IProduto getProduto();
+
+    String getConteudo();
 }

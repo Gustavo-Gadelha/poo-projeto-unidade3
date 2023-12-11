@@ -1,8 +1,6 @@
 package com.fesfafic.Model;
 
 import com.fesfafic.Contract.ICliente;
-import com.fesfafic.Contract.ICoupon;
-import com.fesfafic.Contract.IPedido;
 import com.fesfafic.Contract.IRecibo;
 
 import java.util.ArrayList;
@@ -11,16 +9,31 @@ import java.util.UUID;
 public class Recibo implements IRecibo {
     private UUID id;
     private ICliente cliente;
-    private ArrayList<IPedido> pedidos;
-    private ArrayList<ICoupon> coupons;
-    private double valor;
+    private ArrayList<Pedido> pedidos;
+    private ArrayList<Coupon> coupons;
+    private boolean emAberto;
 
-    public Recibo(ICliente cliente, ArrayList<IPedido> pedidos, ArrayList<ICoupon> coupons, double valor) {
+    public Recibo(ICliente cliente) {
         this.id = UUID.randomUUID();
         this.cliente = cliente;
-        this.pedidos = pedidos;
-        this.coupons = coupons;
-        this.valor = valor;
+        this.pedidos = new ArrayList<>();
+        this.coupons = new ArrayList<>();
+        this.emAberto = true;
+    }
+
+    @Override
+    public boolean adicionarPedidos(ArrayList<Pedido> pedidos) {
+        return this.pedidos.addAll(pedidos);
+    }
+
+    @Override
+    public boolean adicionarCoupon(Coupon coupon) {
+        return this.coupons.add(coupon);
+    }
+
+    @Override
+    public boolean removerCoupon(Coupon coupon) {
+        return this.coupons.remove(coupon);
     }
 
     @Override
@@ -34,17 +47,22 @@ public class Recibo implements IRecibo {
     }
 
     @Override
-    public ArrayList<IPedido> getPedidos() {
+    public ArrayList<Pedido> getPedidos() {
         return this.pedidos;
     }
 
     @Override
-    public ArrayList<ICoupon> getCoupons() {
+    public ArrayList<Coupon> getCoupons() {
         return coupons;
     }
 
     @Override
-    public double getValor() {
-        return valor;
+    public boolean isEmAberto() {
+        return emAberto;
+    }
+
+    @Override
+    public void setEmAberto(boolean emAberto) {
+        this.emAberto = emAberto;
     }
 }

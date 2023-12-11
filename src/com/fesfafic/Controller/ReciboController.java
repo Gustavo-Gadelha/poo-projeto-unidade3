@@ -1,5 +1,6 @@
 package com.fesfafic.Controller;
 
+import com.fesfafic.Contract.ICliente;
 import com.fesfafic.Contract.IController;
 import com.fesfafic.DAO.ReciboDAO;
 import com.fesfafic.Model.Recibo;
@@ -17,6 +18,10 @@ public class ReciboController implements IController<Recibo> {
     @Override
     public Recibo get(UUID id) {
         return dao.get(id);
+    }
+
+    public Recibo get(ICliente cliente) {
+        return dao.get(cliente);
     }
 
     @Override
