@@ -9,15 +9,16 @@ import com.fesfafic.Model.Coupon;
 import com.fesfafic.Model.Pedido;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class PedidoUtil {
-    public static Pedido fazerPedido(ICliente cliente, IProduto produto) throws VendedorException, PedidoException, ProdutoException, NumberFormatException {
+    public static Pedido fazerPedido(Scanner lineScanner, ICliente cliente, IProduto produto) throws VendedorException, PedidoException, ProdutoException, NumberFormatException {
         if (produto.getVendedor() == cliente) {
             throw new VendedorException("Vendedores não podem avaliar seus próprios produtos");
         }
 
         // Quantidade do pedido deve ser menor ou igual à quantidade do produto
-        int quantidade = ProdutoUtil.pedirQuantidade();
+        int quantidade = ProdutoUtil.pedirQuantidade(lineScanner);
 
         if (quantidade > produto.getQuantidade()) {
             throw new PedidoException("Quantidade do pedido deve ser menor ou igual a quantidade do produto");

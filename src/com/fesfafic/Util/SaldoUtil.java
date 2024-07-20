@@ -5,9 +5,7 @@ import com.fesfafic.Exception.SaldoException;
 import java.util.Scanner;
 
 public class SaldoUtil {
-    private static final Scanner lineScanner = new Scanner(System.in);
-
-    public static double pedirDeposito() throws NumberFormatException, SaldoException {
+    public static double pedirDeposito(Scanner lineScanner) throws NumberFormatException, SaldoException {
         // Valor do depósito, deve ser um número decimal e maior que zero
         System.out.print("Digite o valor do deposito: ");
         double deposito;

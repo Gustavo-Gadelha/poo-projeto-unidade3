@@ -10,9 +10,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class AvaliacaoUtil {
-    private static final Scanner lineScanner = new Scanner(System.in);
-
-    public static Avaliacao pedirAvaliacao(ICliente cliente, IProduto produto) throws VendedorException, AtributoVazioException {
+    public static Avaliacao pedirAvaliacao(Scanner lineScanner, ICliente cliente, IProduto produto) throws VendedorException, AtributoVazioException {
         if (produto.getVendedor() == cliente) {
             throw new VendedorException("Vendedores não podem avaliar seus próprios produtos");
         }

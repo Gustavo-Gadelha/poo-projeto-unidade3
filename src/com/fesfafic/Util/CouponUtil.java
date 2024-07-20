@@ -6,15 +6,13 @@ import com.fesfafic.Model.Coupon;
 import java.util.Scanner;
 
 public class CouponUtil {
-    private static final Scanner lineScanner = new Scanner(System.in);
-
-    public static Coupon criarCoupon() throws CouponException, NumberFormatException {
-        String codigo = CouponUtil.pedirCodigo();
-        int desconto = CouponUtil.pedirDesconto();
+    public static Coupon criarCoupon(Scanner lineScanner) throws CouponException, NumberFormatException {
+        String codigo = CouponUtil.pedirCodigo(lineScanner);
+        int desconto = CouponUtil.pedirDesconto(lineScanner);
         return new Coupon(codigo, desconto);
     }
 
-    public static String pedirCodigo() throws CouponException {
+    public static String pedirCodigo(Scanner lineScanner) throws CouponException {
         System.out.print("Digite o código do coupon: ");
         String codigo = lineScanner.nextLine().strip();
 
@@ -25,7 +23,7 @@ public class CouponUtil {
         return codigo;
     }
 
-    public static int pedirDesconto() throws CouponException, NumberFormatException {
+    public static int pedirDesconto(Scanner lineScanner) throws CouponException, NumberFormatException {
         System.out.print("Digite a porcentagem de desconto do coupon: ");
         int codigo;
         try {

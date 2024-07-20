@@ -8,19 +8,17 @@ import com.fesfafic.Model.Produto;
 import java.util.Scanner;
 
 public class VendedorUtil {
-    private static final Scanner lineScanner = new Scanner(System.in);
-
-    public static Produto publicarProduto(ICliente cliente) throws ProdutoException, AtributoVazioException, NumberFormatException {
+    public static Produto publicarProduto(Scanner lineScanner, ICliente cliente) throws ProdutoException, AtributoVazioException, NumberFormatException {
         System.out.println("\n========== Publicar Produto ==========\n");
 
-        String nome = ProdutoUtil.pedirNome();
-        double valor = ProdutoUtil.pedirValor();
-        int quantidade = ProdutoUtil.pedirQuantidade();
+        String nome = ProdutoUtil.pedirNome(lineScanner);
+        double valor = ProdutoUtil.pedirValor(lineScanner);
+        int quantidade = ProdutoUtil.pedirQuantidade(lineScanner);
 
         return new Produto(cliente, nome, valor, quantidade);
     }
 
-    public static void atualizarProduto(Produto produto) throws ProdutoException, AtributoVazioException, NumberFormatException {
+    public static void atualizarProduto(Scanner lineScanner, Produto produto) throws ProdutoException, AtributoVazioException, NumberFormatException {
         String escolha;
         System.out.println(
                 """
@@ -40,21 +38,21 @@ public class VendedorUtil {
         switch (escolha) {
             // 1. Atualizar Nome
             case "1": {
-                String nome = ProdutoUtil.pedirNome();
+                String nome = ProdutoUtil.pedirNome(lineScanner);
                 produto.setNome(nome);
                 break;
             }
 
             // 2. Atualizar Valor
             case "2": {
-                double valor = ProdutoUtil.pedirValor();
+                double valor = ProdutoUtil.pedirValor(lineScanner);
                 produto.setValor(valor);
                 break;
             }
 
             // 3. Atualizar Quantidade
             case "3": {
-                int quantidade = ProdutoUtil.pedirQuantidade();
+                int quantidade = ProdutoUtil.pedirQuantidade(lineScanner);
                 produto.setQuantidade(quantidade);
                 break;
             }

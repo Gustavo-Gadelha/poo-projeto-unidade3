@@ -1,4 +1,4 @@
-package com.fesfafic.Util;
+package com.fesfafic.Menu;
 
 import com.fesfafic.Contract.IAdministrador;
 import com.fesfafic.Contract.ICliente;
@@ -7,21 +7,22 @@ import com.fesfafic.Contract.IProduto;
 import com.fesfafic.Controller.*;
 import com.fesfafic.Exception.*;
 import com.fesfafic.Model.*;
+import com.fesfafic.Util.*;
 
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Menu implements IMenu {
-    private static ClienteController clienteController;
-    private static AdministradorController administradorController;
-    private static ProdutoController produtoController;
-    private static CouponController couponController;
-    private static ReciboController reciboController;
-    private static PedidoController pedidoController;
-    private static AvaliacaoController avaliacaoController;
+    private static final ClienteController clienteController;
+    private static final AdministradorController administradorController;
+    private static final ProdutoController produtoController;
+    private static final CouponController couponController;
+    private static final ReciboController reciboController;
+    private static final PedidoController pedidoController;
+    private static final AvaliacaoController avaliacaoController;
     private final static Scanner lineScanner = new Scanner(System.in);
 
-    public Menu() {
+    static {
         clienteController = new ClienteController();
         administradorController = new AdministradorController();
         produtoController = new ProdutoController();
@@ -68,7 +69,7 @@ public class Menu implements IMenu {
                     // Possíveis erros: E-mail ou Senha em branco
                     // Possível erro: E-mail já cadastrado
                     try {
-                        Cliente cliente = AcessoUtil.pedirCadastro(clienteController.listarTodos());
+                        Cliente cliente = AcessoUtil.pedirCadastro(lineScanner, clienteController.listarTodos());
                         if (clienteController.adicionar(cliente)) {
                             System.out.println("Cadastro realizado com sucesso!");
                         } else {
@@ -85,7 +86,7 @@ public class Menu implements IMenu {
                 case "2": {
                     try {
                         // Possíveis erros: E-mail ou Senha em branco
-                        Cliente cliente = AcessoUtil.pedirLogin(clienteController.listarTodos());
+                        Cliente cliente = AcessoUtil.pedirLogin(lineScanner, clienteController.listarTodos());
                         if (cliente != null) {
                             menuCliente(cliente);
                         }
@@ -100,7 +101,7 @@ public class Menu implements IMenu {
                 case "3": {
                     // Possíveis erros: E-mail ou Senha em branco
                     try {
-                        Cliente cliente = AcessoUtil.pedirLogin(clienteController.listarTodos());
+                        Cliente cliente = AcessoUtil.pedirLogin(lineScanner, clienteController.listarTodos());
                         if (cliente != null) {
                             menuVendedor(cliente);
                         }
@@ -115,7 +116,7 @@ public class Menu implements IMenu {
                 case "4": {
                     // Possíveis erros: E-mail ou Senha em branco
                     try {
-                        Administrador administrador = AcessoUtil.pedirAdmnistrador(administradorController.listarTodos());
+                        Administrador administrador = AcessoUtil.pedirAdmnistrador(lineScanner, administradorController.listarTodos());
                         if (administrador != null) {
                             menuAdministrador(administrador);
                         }
@@ -166,7 +167,7 @@ public class Menu implements IMenu {
                     // Possível erro: Desconto maior que 100
                     // Possível erro: Desconto menor ou igual a 0
                     try {
-                        Coupon coupon = CouponUtil.criarCoupon();
+                        Coupon coupon = CouponUtil.criarCoupon(lineScanner);
                         couponController.adicionar(coupon);
                     } catch (CouponException | NumberFormatException e) {
                         System.err.println("ERRO: " + e);
@@ -179,7 +180,7 @@ public class Menu implements IMenu {
                 case "2": {
                     // Possível erro: Código não possui exatamente 8 caracteres
                     try {
-                        Coupon coupon = couponController.get(CouponUtil.pedirCodigo());
+                        Coupon coupon = couponController.get(CouponUtil.pedirCodigo(lineScanner));
                         couponController.remover(coupon);
                     } catch (CouponException | NumberFormatException e) {
                         System.err.println("ERRO: " + e);
@@ -194,7 +195,7 @@ public class Menu implements IMenu {
                     // Possível erro: E-mail já registrado
                     // Possível erro: Código de acesso já registrado
                     try {
-                        Administrador admin = AcessoUtil.cadastrarAdministrador(administradorController.listarTodos());
+                        Administrador admin = AcessoUtil.cadastrarAdministrador(lineScanner, administradorController.listarTodos());
                         administradorController.adicionar(admin);
                     } catch (CadastroException | AtributoVazioException e) {
                         System.err.println("ERRO: " + e);
@@ -207,7 +208,7 @@ public class Menu implements IMenu {
                 case "4": {
                     // Possíveis erros: E-mail, Senha ou Código de Acesso em branco
                     try {
-                        Administrador admin = administradorController.get(AcessoUtil.pedirCodigoDeAcesso());
+                        Administrador admin = administradorController.get(AcessoUtil.pedirCodigoDeAcesso(lineScanner));
                         administradorController.remover(admin);
                     } catch (AtributoVazioException e) {
                         System.err.println("ERRO: " + e);
@@ -278,8 +279,8 @@ public class Menu implements IMenu {
                     // Possível erro: Quantidade maior que quantidade do produto
                     // Possível Erro: Vendedor fazendo um pedido do próprio produto
                     try {
-                        Produto produto = produtoController.get(ProdutoUtil.pedirIndice(produtos.size()));
-                        Pedido pedido = PedidoUtil.fazerPedido(cliente, produto);
+                        Produto produto = produtoController.get(ProdutoUtil.pedirIndice(lineScanner, produtos.size()));
+                        Pedido pedido = PedidoUtil.fazerPedido(lineScanner, cliente, produto);
                         pedidoController.adicionar(pedido);
                     } catch (IndexOutOfBoundsException | NumberFormatException |
                              PedidoException | VendedorException e) {
@@ -295,8 +296,8 @@ public class Menu implements IMenu {
                     // Possível Erro: Conteúdo da avaliação vazío
                     // Possível Erro: Vendedor avaliando o próprio produto
                     try {
-                        Produto produto = produtoController.get(ProdutoUtil.pedirIndice(produtos.size()));
-                        Avaliacao avaliacao = AvaliacaoUtil.pedirAvaliacao(cliente, produto);
+                        Produto produto = produtoController.get(ProdutoUtil.pedirIndice(lineScanner, produtos.size()));
+                        Avaliacao avaliacao = AvaliacaoUtil.pedirAvaliacao(lineScanner, cliente, produto);
                         avaliacaoController.adicionar(avaliacao);
                     } catch (IndexOutOfBoundsException | NumberFormatException |
                              AtributoVazioException | VendedorException e) {
@@ -310,7 +311,7 @@ public class Menu implements IMenu {
                 case "4": {
                     // Possíveis erros: Índice menor que 0, Índice maior que tamanho da lista
                     try {
-                        Produto produto = produtoController.get(ProdutoUtil.pedirIndice(produtos.size()));
+                        Produto produto = produtoController.get(ProdutoUtil.pedirIndice(lineScanner, produtos.size()));
                         AvaliacaoUtil.exibirAvaliacoes(avaliacaoController.listarPorProduto(produto));
                     } catch (IndexOutOfBoundsException | NumberFormatException e) {
                         System.err.println("ERRO: " + e);
@@ -329,7 +330,7 @@ public class Menu implements IMenu {
                 case "6": {
                     // Possível erro: Deposito menor que zero ou não é um número
                     try {
-                        cliente.depositar(SaldoUtil.pedirDeposito());
+                        cliente.depositar(SaldoUtil.pedirDeposito(lineScanner));
                     } catch (NumberFormatException | SaldoException e) {
                         System.err.println("ERRO: " + e);
                         System.err.println("Abortando...\n");
@@ -403,7 +404,7 @@ public class Menu implements IMenu {
                     // Possível erro: Nome do produto em branco
                     // Possível erro: Valor/Quantidade menor ou igual a 0
                     try {
-                        Produto produto = VendedorUtil.publicarProduto(cliente);
+                        Produto produto = VendedorUtil.publicarProduto(lineScanner, cliente);
                         produtoController.adicionar(produto);
                     } catch (ProdutoException | NumberFormatException |
                              AtributoVazioException e) {
@@ -417,7 +418,7 @@ public class Menu implements IMenu {
                 case "3": {
                     // Possíveis erros: Índice menor que 0, Índice maior que tamanho da lista
                     try {
-                        Produto produto = produtoController.get(ProdutoUtil.pedirIndice(produtos.size()));
+                        Produto produto = produtoController.get(ProdutoUtil.pedirIndice(lineScanner, produtos.size()));
                         pedidoController.removerPorProduto(produto);
                         avaliacaoController.removerPorProduto(produto);
                         produtoController.remover(produto);
@@ -434,8 +435,8 @@ public class Menu implements IMenu {
                     // Possível erro: Nome do produto em branco
                     // Possível erro: Valor/Quantidade menor ou igual a 0
                     try {
-                        Produto produto = produtoController.get(ProdutoUtil.pedirIndice(produtos.size()));
-                        VendedorUtil.atualizarProduto(produto);
+                        Produto produto = produtoController.get(ProdutoUtil.pedirIndice(lineScanner, produtos.size()));
+                        VendedorUtil.atualizarProduto(lineScanner, produto);
                     } catch (IndexOutOfBoundsException | NumberFormatException |
                              ProdutoException | AtributoVazioException e) {
                         System.err.println("ERRO: " + e);
@@ -498,7 +499,7 @@ public class Menu implements IMenu {
                 case "2": {
                     // Possíveis erros: Índice menor que 0, Índice maior que tamanho da lista
                     try {
-                        Pedido pedido = pedidoController.get(ProdutoUtil.pedirIndice(pedidos.size()));
+                        Pedido pedido = pedidoController.get(ProdutoUtil.pedirIndice(lineScanner, pedidos.size()));
                         IProduto produto = pedido.getProduto();
                         produto.setQuantidade(produto.getQuantidade() + pedido.getQuantidade());
                         pedidoController.remover(pedido);
@@ -561,7 +562,7 @@ public class Menu implements IMenu {
                 case "1": {
                     // Possível erro: código do cupom não tem 8 caracteres
                     try {
-                        String codigo = CouponUtil.pedirCodigo();
+                        String codigo = CouponUtil.pedirCodigo(lineScanner);
                         recibo.adicionarCoupon(couponController.get(codigo));
                     } catch (CouponException e) {
                         System.err.println("ERRO: " + e);

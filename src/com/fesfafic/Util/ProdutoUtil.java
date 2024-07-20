@@ -8,9 +8,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class ProdutoUtil {
-    private static final Scanner lineScanner = new Scanner(System.in);
-
-    public static int pedirIndice(int limite) throws IndexOutOfBoundsException, NumberFormatException {
+    public static int pedirIndice(Scanner lineScanner, int limite) throws IndexOutOfBoundsException, NumberFormatException {
         int indice;
         System.out.print("Digite o índice do produto: ");
         try {
@@ -28,7 +26,7 @@ public class ProdutoUtil {
         return indice;
     }
 
-    public static String pedirNome() throws AtributoVazioException {
+    public static String pedirNome(Scanner lineScanner) throws AtributoVazioException {
         // Nome do produto, não pode estar em branco
         System.out.print("Digite o nome do produto: ");
         String nome = lineScanner.nextLine().strip();
@@ -38,7 +36,7 @@ public class ProdutoUtil {
         return nome;
     }
 
-    public static double pedirValor() throws ProdutoException, NumberFormatException {
+    public static double pedirValor(Scanner lineScanner) throws ProdutoException, NumberFormatException {
         // Valor do produto, deve ser um número decimal e maior que zero
         System.out.print("Digite o valor do produto: ");
         double valor;
@@ -55,7 +53,7 @@ public class ProdutoUtil {
         return valor;
     }
 
-    public static int pedirQuantidade() throws ProdutoException, NumberFormatException {
+    public static int pedirQuantidade(Scanner lineScanner) throws ProdutoException, NumberFormatException {
         // Quantidade do produto, deve ser um número inteiro e maior que zero
         System.out.print("Digite a quantidade do produto: ");
         int quantidade;

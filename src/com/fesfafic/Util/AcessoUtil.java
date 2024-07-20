@@ -9,14 +9,12 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class AcessoUtil {
-    private static final Scanner lineScanner = new Scanner(System.in);
-
-    public static Administrador pedirAdmnistrador(ArrayList<Administrador> administradores) throws AtributoVazioException {
+    public static Administrador pedirAdmnistrador(Scanner lineScanner, ArrayList<Administrador> administradores) throws AtributoVazioException {
         System.out.println("\n========== Realizar login ==========\n");
 
-        String email = AcessoUtil.pedirEmail();
-        String senha = AcessoUtil.pedirSenha();
-        String codigoDeAcesso = AcessoUtil.pedirCodigoDeAcesso();
+        String email = AcessoUtil.pedirEmail(lineScanner);
+        String senha = AcessoUtil.pedirSenha(lineScanner);
+        String codigoDeAcesso = AcessoUtil.pedirCodigoDeAcesso(lineScanner);
 
         for (Administrador administrador : administradores) {
             if (administrador.fazerLogin(email, senha, codigoDeAcesso)) {
@@ -29,12 +27,12 @@ public class AcessoUtil {
         return null;
     }
 
-    public static Administrador cadastrarAdministrador(ArrayList<Administrador> administradores) throws AtributoVazioException, CadastroException {
+    public static Administrador cadastrarAdministrador(Scanner lineScanner, ArrayList<Administrador> administradores) throws AtributoVazioException, CadastroException {
         System.out.println("\n========== Criar Administrador ==========\n");
 
-        String email = AcessoUtil.pedirEmail();
-        String senha = AcessoUtil.pedirSenha();
-        String codigoDeAcesso = AcessoUtil.pedirCodigoDeAcesso();
+        String email = AcessoUtil.pedirEmail(lineScanner);
+        String senha = AcessoUtil.pedirSenha(lineScanner);
+        String codigoDeAcesso = AcessoUtil.pedirCodigoDeAcesso(lineScanner);
 
         // Checa se o e-mail e a senha são iguais, caso verdadeiro levanta um erro
         if (email.equalsIgnoreCase(senha)) {
@@ -52,11 +50,11 @@ public class AcessoUtil {
         return new Administrador(email, senha, codigoDeAcesso);
     }
 
-    public static Cliente pedirLogin(ArrayList<Cliente> clientes) throws AtributoVazioException {
+    public static Cliente pedirLogin(Scanner lineScanner, ArrayList<Cliente> clientes) throws AtributoVazioException {
         System.out.println("\n========== Realizar login ==========\n");
 
-        String email = AcessoUtil.pedirEmail();
-        String senha = AcessoUtil.pedirSenha();
+        String email = AcessoUtil.pedirEmail(lineScanner);
+        String senha = AcessoUtil.pedirSenha(lineScanner);
 
         for (Cliente cliente : clientes) {
             if (cliente.fazerLogin(email, senha)) {
@@ -69,11 +67,11 @@ public class AcessoUtil {
         return null;
     }
 
-    public static Cliente pedirCadastro(ArrayList<Cliente> clientes) throws CadastroException, AtributoVazioException {
+    public static Cliente pedirCadastro(Scanner lineScanner, ArrayList<Cliente> clientes) throws CadastroException, AtributoVazioException {
         System.out.println("\n========== Realizar Cadastro ==========\n");
 
-        String email = AcessoUtil.pedirEmail();
-        String senha = AcessoUtil.pedirSenha();
+        String email = AcessoUtil.pedirEmail(lineScanner);
+        String senha = AcessoUtil.pedirSenha(lineScanner);
 
         // Checa se o e-mail e a senha são iguais, caso verdadeiro levanta um erro
         if (email.equalsIgnoreCase(senha)) {
@@ -88,7 +86,7 @@ public class AcessoUtil {
         return new Cliente(email, senha);
     }
 
-    public static String pedirEmail() throws AtributoVazioException {
+    public static String pedirEmail(Scanner lineScanner) throws AtributoVazioException {
         System.out.print("Digite seu e-mail: ");
         String email = lineScanner.nextLine().strip();
 
@@ -100,7 +98,7 @@ public class AcessoUtil {
         return email;
     }
 
-    public static String pedirSenha() throws AtributoVazioException {
+    public static String pedirSenha(Scanner lineScanner) throws AtributoVazioException {
         System.out.print("Digite sua senha: ");
         String senha = lineScanner.nextLine().strip();
 
@@ -112,7 +110,7 @@ public class AcessoUtil {
         return senha;
     }
 
-    public static String pedirCodigoDeAcesso() throws AtributoVazioException {
+    public static String pedirCodigoDeAcesso(Scanner lineScanner) throws AtributoVazioException {
         System.out.print("Digite seu código de acesso: ");
         String codigoDeAcesso = lineScanner.nextLine().strip();
 
